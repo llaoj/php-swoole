@@ -21,8 +21,9 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         sockets
 
 RUN pecl install redis \
-    && pecl install swoole-4.5.2 \
-    && docker-php-ext-enable redis swoole
+    && pecl install swoole-4.5.6 \
+    && pecl install imagick \
+    && docker-php-ext-enable redis swoole imagick
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
