@@ -26,7 +26,7 @@ RUN pecl install redis \
     && pecl install imagick \
     && docker-php-ext-enable redis imagick
 
-RUN curl -fsSL 'https://github.com/swoole/swoole-src/archive/v4.5.7.tar.gz' -o swoole.tar.gz \
+RUN curl -fsSL 'https://github.com/swoole/swoole-src/archive/v4.5.2.tar.gz' -o swoole.tar.gz \
     && mkdir -p /tmp/swoole \
     && tar -xf swoole.tar.gz -C /tmp/swoole --strip-components=1 \
     && rm swoole.tar.gz \
