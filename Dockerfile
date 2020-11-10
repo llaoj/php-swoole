@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
         libpng-dev \
         supervisor \
         libmagickwand-dev libmagickcore-dev \
+        libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -22,9 +23,16 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         sockets
 
 RUN pecl install redis \
-    && pecl install swoole-4.5.6 \
     && pecl install imagick \
-    && docker-php-ext-enable redis swoole imagick
+    && docker-php-ext-enable redis imagick
+
+RUN curl -fsSL 'https://github.com/swoole/swoole-src/archive/v4.5.7.tar.gz' -o swoole.tar.gz \
+    && mkdir -p /tmp/swoole \
+    && tar -xf swoole.tar.gz -C /tmp/swoole --strip-components=1 \
+    && rm swoole.tar.gz \
+    && docker-php-ext-configure /tmp/swoole --enable-openssl --enable-http2 --enable-sockets --enable-mysqlnd \
+    && docker-php-ext-install /tmp/swoole \
+    && rm -r /tmp/swoole
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
