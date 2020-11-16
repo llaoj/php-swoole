@@ -34,14 +34,15 @@ RUN curl -fsSL 'https://github.com/swoole/swoole-src/archive/v4.5.2.tar.gz' -o s
     && docker-php-ext-install /tmp/swoole \
     && rm -r /tmp/swoole
 
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+    && mv ./conf/php-user.ini $PHP_INI_DIR/conf.d/ \
+    && echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
 
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
-COPY conf/php-user.ini $PHP_INI_DIR/conf.d/
 
-COPY ./conf/supervisor/ /etc/supervisor/conf.d/
+ADD ./conf/supervisor/ /etc/supervisor/conf.d/
 
 WORKDIR /var/www/html
 
