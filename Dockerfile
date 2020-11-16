@@ -35,8 +35,8 @@ RUN curl -fsSL 'https://github.com/swoole/swoole-src/archive/v4.5.2.tar.gz' -o s
     && rm -r /tmp/swoole
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
-    && mv ./conf/php-user.ini $PHP_INI_DIR/conf.d/ \
     && echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+ADD ./conf/php-user.ini $PHP_INI_DIR/conf.d/
 
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
